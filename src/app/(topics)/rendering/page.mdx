@@ -1,0 +1,36 @@
+import TopicsNav from "@/components/TopicsNav";
+
+# Rendering Strategy
+
+Before the arrival of Next 13, we had several options for rendering pages:
+
+- **SSR** (Server Side Rendering)
+- **SSG** (Static Site Generation)
+- **ISR** (Incremental Static Regeneration)
+
+After the introduction of the App router, we gained another, entirely new type of page rendering:
+
+- **Server components** (hybrid web applications)
+
+To avoid dragging on and diving into what everyone already knows, let's quickly gather the drawbacks of Next < 12 rendering,
+and then see how all these issues are addressed in Next >= 13.
+
+### Drawbacks of SSR, SSG, ISR
+
+- It's impossible to combine SSR & ISR. If we want dynamic SEO data, we need to use SSR,
+  but in this case, we lose page loading speed and all the benefits of ISR.
+- Limited capabilities in working with the root `<html>` tag.
+- All SEO features must be configured manually, often involving third-party libraries.
+
+### App router & Server components
+
+- Allows the use of SSR & ISR together. This is literally implied by the name - **hybrid web applications**.
+- Enables flexible handling of any page elements, conveniently reusing them.
+- Most SEO features are already integrated into Next.js, with only configuration required.
+
+## Conclusion
+
+App router and server components is a huge step forward in the development of web applications both Technial and SEO.
+It's a new level of flexibility and convenience. Use it and enjoy it!
+
+<TopicsNav prevLink={{title: 'Dashboard', path: '/'}} nextLink={{title: 'Meta tags', path: '/meta-tags'}} />
