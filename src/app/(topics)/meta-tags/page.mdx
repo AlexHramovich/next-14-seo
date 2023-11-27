@@ -2,7 +2,7 @@ import TopicsNav from "@/components/TopicsNav";
 
 # Meta tags
 
-## Old ways
+## Pages router
 
 In previous versions of Next.js, to set meta tags, you needed to use the `Head` component from the `next/head` package.
 
@@ -26,7 +26,7 @@ export default IndexPage;
 
 Based on this approach, all SEO was done, requiring knowledge of exactly what you needed and how it worked. Nowadays, things are simpler, with ready-made tools available that cover most of your needs.
 
-## New ways
+## App router
 
 Next.js version that based on app router has a Metadata API. there are several ways you can add metadata to your application:
 
@@ -97,6 +97,73 @@ export default function Page({ params, searchParams }: Props) {}
 
 For all the available params, see the <a href="https://nextjs.org/docs/app/api-reference/functions/generate-metadata" target="_blank">API Reference</a>.
 This function give as a possibility to fetch data from API and set metadata based on this data. The rerutn object follow the format of the <a href="https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadata-object" target="_blank">Metadata object</a>.
+
+### File-based metadata
+
+Last but not least, we can add metadata to our pages based on files.
+This is a powerful feature that designed to work with favicons, robots.txt, sitemap.xml, robots.txt etc.
+
+We are not going to cover all the possibilities of this feature, Please read the full documentation <a href="https://nextjs.org/docs/app/building-your-application/optimizing/metadata#file-based-metadata" target="_blank">here</a>.
+
+But we would like to hightkight one of them. It is a <a href="https://nextjs.org/docs/app/building-your-application/optimizing/metadata#dynamic-image-generation" target="_blank">Dynamic Image Gerenation</a> package.
+
+#### Dynamic Image Generation
+
+By using this feature we can greate og:image on a fly or on a build lvl.
+Simply create file named `opengraph-image.tsx` and write the following code:
+
+```javascript
+import { ImageResponse } from "next/og";
+
+// Route segment config
+export const runtime = "edge";
+
+// Image metadata
+export const alt = "About Acme";
+export const size = {
+  width: 1200,
+  height: 630,
+};
+
+export const contentType = "image/png";
+
+// Image generation
+export default async function Image() {
+  return new ImageResponse(
+    (
+      // ImageResponse JSX element
+      <div
+        style={{
+          fontSize: 128,
+          background: "white",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        About Acme
+      </div>
+    ),
+    // ImageResponse options
+    {
+      // For convenience, we can re-use the exported opengraph-image
+      // size config to also set the ImageResponse's width and height.
+      ...size,
+    }
+  );
+}
+```
+
+Next.js will automatically generate an image and place all needed metadata in the head of the page.
+All work is done on the edge, so it is very fast and cacheable.
+
+## Conclusion
+
+The latest versions of Next.js offer a range of built-in solutions for handling metadata,
+simplifying the process and reducing the need for additional libraries or extensive manual coding.
+These advancements provide us with efficient and flexible options for SEO optimization. So let's use them.
 
 <TopicsNav
   prevLink={{ title: "Renderind strategy", path: "/rendering" }}
