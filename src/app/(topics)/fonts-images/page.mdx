@@ -1,0 +1,141 @@
+import TopicsNav from "@/components/TopicsNav";
+
+# Images, fonts and scripts optimizations
+
+In this topic we're not going to separate pages and app routers,
+because we're going to talk about some optimizations that can be applied to both.
+
+All we need to do is to make sure we use components that Next.js provides us.
+BTW, those components were developed by the Next.js team in collaboration with Google, so these elements aware of the best practices.
+
+## Images
+
+By using Next.js image component we are able to cover several optimizations:
+
+- faster page loads (LCP)
+- size optimization (LCP)
+- avoid layout shift (CLS)
+- asset flexibility (LCP)
+
+Here is an example of how to use it:
+
+```jsx
+import Image from "next/image";
+
+export default function Page() {
+  return (
+    <Image
+      src="https://s3.amazonaws.com/my-bucket/profile.png"
+      alt="Picture of the author"
+      width={500}
+      height={500}
+    />
+  );
+}
+```
+
+Here is the link to official documentation where you can find more full API.
+
+<a
+  href="https://nextjs.org/docs/app/building-your-application/optimizing/images"
+  target="_blank"
+>
+  DOCS
+</a>
+
+## Fonts
+
+`next/font` provides us with a component that allows us to load fonts in a way that is optimized for performance.
+It's exceptionally useful for loading fonts from Google Fonts, but it can also be used to load fonts from other sources.
+It has built-in automatic self-hoisting, so CLS is not a problem with that solution.
+
+#### Google fonts
+
+```jsx
+import { Roboto } from "next/font/google";
+
+const roboto = Roboto({
+  weight: "400",
+  subsets: ["latin"],
+  display: "swap",
+});
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode,
+}) {
+  return (
+    <html lang="en" className={roboto.className}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+#### Local fonts
+
+```jsx
+import localFont from "next/font/local";
+
+// Font files can be colocated inside of `app`
+const myFont = localFont({
+  src: "./my-font.woff2",
+  display: "swap",
+});
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode,
+}) {
+  return (
+    <html lang="en" className={myFont.className}>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+Again, full API link. <a href="https://nextjs.org/docs/app/building-your-application/optimizing/fonts" target="\_blank">DOCS</a>
+
+## Scripts
+
+Same sort of optimizatoions is also avaible for scripts.
+The most important part of this component is `strategy` that can be a gamechanger for your app.
+Find more about it in the <a href="https://nextjs.org/docs/app/api-reference/components/script" target="\_blank">DOCS</a>.
+
+Example:
+
+```jsx
+import Script from "next/script";
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode,
+}) {
+  return (
+    <>
+      <section>{children}</section>
+      <Script src="https://example.com/script.js" strategy="afterInteractive" />
+    </>
+  );
+}
+```
+
+## Conclusion
+
+All these components are really your best friends when it comes to performance optimization.
+Amazing job from the Next.js team! Make sure you use them in your app everywhere you can.
+
+<TopicsNav
+  prevLink={{
+    title: "Canonical & Localization tags",
+    path: "/canonical-localization",
+  }}
+  nextLink={{
+    title: "Core Web Vitals",
+    path: "/core-web-vitals",
+  }}
+/>

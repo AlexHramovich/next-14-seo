@@ -1,0 +1,115 @@
+import TopicsNav from "@/components/TopicsNav";
+
+# Canonical & Localization tags
+
+## Pages router
+
+in this section we will cover 2 topics:
+
+- **canonical tag**
+- **alternates tags**
+
+Both topics are equally important for SEO, but be sure you understand them well, they can potentially damage your SEO if you use them wrong.
+
+The is no difference what meta tags you would to add to the page the method is the same.
+Use `<Head>` component from `next/head` package and add meta tags inside it.
+
+This way we need to create a banch of tags based on the data we have.
+Would be a good idea to carefully follow an official Google documentation, because here we have some tricky moments. <a href="https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls" target="_blank">
+Canonical docs</a>, <a href="https://developers.google.com/search/docs/specialty/international/localized-versions" target="_blank">Alternates docs</a>
+
+```js
+import Head from "next/head";
+
+function IndexPage() {
+  return (
+    <div>
+      <Head>
+        <title>My page title</title>
+        <link rel="canonical" href="https://www.example.com/" />
+        <link
+          rel="alternate"
+          hrefLang="en-gb"
+          href="https://en-gb.example.com/page.html"
+        />
+        <link
+          rel="alternate"
+          hrefLang="en-us"
+          href="https://en-us.example.com/page.html"
+        />
+        <link
+          rel="alternate"
+          hrefLang="en"
+          href="https://en.example.com/page.html"
+        />
+        <link
+          rel="alternate"
+          hrefLang="de"
+          href="https://de.example.com/page.html"
+        />
+        <link
+          rel="alternate"
+          hrefLang="x-default"
+          href="https://www.example.com/"
+        />
+      </Head>
+      <p>Hello world!</p>
+    </div>
+  );
+}
+
+export default IndexPage;
+```
+
+## App router
+
+To cover the same topics in the app router we just need to extend the Metadata object with the new properties.
+Please learn more about this object in the <a href="/topics/metadata">Metadata</a> section.
+
+```js
+export const metadata = {
+  alternates: {
+    canonical: "https://nextjs.org",
+    languages: {
+      "en-US": "https://nextjs.org/en-US",
+      "de-DE": "https://nextjs.org/de-DE",
+    },
+    media: {
+      "only screen and (max-width: 600px)": "https://nextjs.org/mobile",
+    },
+    types: {
+      "application/rss+xml": "https://nextjs.org/rss",
+    },
+  },
+};
+```
+
+This code will result in the following tags:
+
+```html
+<link rel="canonical" href="https://nextjs.org" />
+<link rel="alternate" hreflang="en-US" href="https://nextjs.org/en-US" />
+<link rel="alternate" hreflang="de-DE" href="https://nextjs.org/de-DE" />
+<link
+  rel="alternate"
+  media="only screen and (max-width: 600px)"
+  href="https://nextjs.org/mobile"
+/>
+<link
+  rel="alternate"
+  type="application/rss+xml"
+  href="https://nextjs.org/rss"
+/>
+```
+
+Same rools are applied. You need to learn more about the Alternates and Canonical tags and use them wisely.
+
+## Conclusion
+
+There is no huge difference between the app and pages router.
+It's only about syntax and the way you use it. but we like App router version more, because it's more documented and easy to read.
+
+<TopicsNav
+  prevLink={{ title: "Sitemap & Robots.txt", path: "/sitemap-robots" }}
+  nextLink={{ title: "Fonts & Images optimization", path: "/fonts-images" }}
+/>

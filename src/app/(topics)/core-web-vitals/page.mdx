@@ -1,0 +1,79 @@
+import TopicsNav from "@/components/TopicsNav";
+import TopicsImages from "@/components/TopicsImages";
+
+# Core Web Vitals
+
+Not so long ago, Google announced that they will be using Core Web Vitals as a ranking factor for websites.
+This means that if your website is not optimized, it will be ranked lower than websites that others.
+
+It became a hot topic in the SEO community and nowadays everyone is talking about it.
+
+We are going to cover the most important metrics and ways to optimize them.
+But please remember that Google is constantly changing and updating their algorithms, so make sure you keep an eye on the latest updates.
+
+## How to measure Core Web Vitals
+
+Visit <a href="https://pagespeed.web.dev/" target="_blank">PageSpeed Insights</a> and enter your website URL.
+You'll get a score for both mobile and desktop versions of your website. There are 2 parts. First one is based on what your real users are experiencing.
+And this part is the most important one.
+
+<TopicsImages id="real-users-data" />
+
+Right below you'll see the lab data. This is based on a simulated environment.
+This is the part where you should pay attention to when you are optimizing your website.
+
+<TopicsImages id="lab-data" />
+
+### First Contentful Paint (FCP)
+
+First Contentful Paint marks the time at which the first text or image is painted.
+
+Practical advices to improve FCP:
+
+- Use a CDN to deliver assets close to your users
+- Reduce server response times
+- Elemiate render-blocking resources
+
+### Larget Contentful Paint (LCP)
+
+Largest Contentful Paint marks the time at which the largest text or image is painted.
+
+Practical advices to improve LCP:
+
+- Images and fonts! Check out our previoes topic about images optimization <a href="/fonts-images">here</a>
+- Make sure your CSS is not blocking the rendering of your page
+
+### Total Blocking Time (TBT)
+
+Sum of all time periods between FCP and Time to Interactive, when task length exceeded 50ms, expressed in milliseconds.
+
+Practical advices to improve LCP:
+
+- Scripts optimization. Check out our previoes topic about scripts optimization <a href="/fonts-images">here</a>
+- Codesplitting (App router do it best here)
+- remove unused code and trird-party libraries
+
+### Cumulative Layout Shift (CLS)
+
+Cumulative Layout Shift measures the movement of visible elements within the viewport.
+
+Practical advices to improve CLS:
+
+- Images and videos should have width and height attributes
+- Make sure your fonts are optimizied and, if possible, loaded before rendering the page
+
+## Conclusion
+
+With Next.js and especially with App router it's really easy to optimize your website for Core Web Vitals.
+Most of the things and tools are already done for us. Just need to make sure we use them is a proper way.D
+
+<TopicsNav
+  prevLink={{
+    title: "Fonts, images and scripts optimizations",
+    path: "/fonts-images",
+  }}
+  nextLink={{
+    title: "Dashborad",
+    path: "/",
+  }}
+/>

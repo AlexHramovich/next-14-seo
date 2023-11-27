@@ -14,28 +14,28 @@ const TOPICS = [
     link: "/meta-tags",
   },
   {
-    title: "Sitemap, robots.txt",
+    title: "Sitemap & robots.txt",
     description:
       "Tools for guiding search engines in website navigation and indexing.",
-    link: "#",
+    link: "/sitemap-robots",
   },
   {
-    title: "Localisation",
+    title: "Canonical & Localization tags",
     description:
-      "Localisation practices, possibly using 'ahref' for multilingual support.",
-    link: "#",
+      "localization practices, possibly using 'ahref' for multilingual support.",
+    link: "/canonical-localization",
   },
   {
-    title: "Images and fonts optimization",
+    title: "Images, fonts and scripts optimizations",
     description:
-      "Optimizing images and fonts for better performance and load times.",
-    link: "#",
+      "Optimizing images, fonts and scripts for better performance and load times.",
+    link: "/fonts-images",
   },
   {
     title: "Core web vitals",
     description:
       "Essential metrics for a healthy, user-friendly web experience.",
-    link: "#",
+    link: "/core-web-vitals",
   },
   {
     title: "Structured data",

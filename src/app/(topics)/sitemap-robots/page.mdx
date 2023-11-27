@@ -1,0 +1,186 @@
+import TopicsNav from "@/components/TopicsNav";
+
+# Sitemap & Robots.txt
+
+## Pages router
+
+The sitemap implementation should be done manually. One of the ways to do it is to create a file `sitemap.xml` in you public folder,
+so it will be available by the path `/sitemap.xml`. The same rules are applied to the `robots.txt` file.
+You can create a static file or use the `getServerSideProps` function to generate it dynamically.
+
+### Static
+
+```xml
+   <!-- public/sitemap.xml -->
+   <xml version="1.0" encoding="UTF-8">
+   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+     <url>
+       <loc>http://www.example.com/foo</loc>
+       <lastmod>2021-06-01</lastmod>
+     </url>
+   </urlset>
+   </xml>
+```
+
+### Dynamic
+
+Dynamic version with `getServerSideProps`:
+
+```javascript
+//pages/sitemap.xml.js
+const EXTERNAL_DATA_URL = "https://jsonplaceholder.typicode.com/posts";
+
+function generateSiteMap(posts) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+     <!--We manually set the two URLs we know already-->
+     <url>
+       <loc>https://jsonplaceholder.typicode.com</loc>
+     </url>
+     <url>
+       <loc>https://jsonplaceholder.typicode.com/guide</loc>
+     </url>
+     ${posts
+       .map(({ id }) => {
+         return `
+       <url>
+           <loc>${`${EXTERNAL_DATA_URL}/${id}`}</loc>
+       </url>
+     `;
+       })
+       .join("")}
+   </urlset>
+ `;
+}
+
+function SiteMap() {
+  // getServerSideProps will do the heavy lifting
+}
+
+export async function getServerSideProps({ res }) {
+  // We make an API call to gather the URLs for our site
+  const request = await fetch(EXTERNAL_DATA_URL);
+  const posts = await request.json();
+
+  // We generate the XML sitemap with the posts data
+  const sitemap = generateSiteMap(posts);
+
+  res.setHeader("Content-Type", "text/xml");
+  // we send the XML to the browser
+  res.write(sitemap);
+  res.end();
+
+  return {
+    props: {},
+  };
+}
+
+export default SiteMap;
+```
+
+## App Router
+
+Same as with the pages router, you can create a static or dynamic sitemap \ robots.txt.
+Both of them is about creation a file in the root of your project:
+
+- static (`sitemap.xml` || `robots.txt`)
+- dynamic (`sitemap.ts` || `robots.ts`)
+
+### Static
+
+Create a file `sitemap.xml` in the root of your project and fill it with the content.
+
+- simemap
+
+```xml
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://acme.com</loc>
+    <lastmod>2023-04-06T15:02:24.021Z</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>1</priority>
+  </url>
+  <url>
+    <loc>https://acme.com/about</loc>
+    <lastmod>2023-04-06T15:02:24.021Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://acme.com/blog</loc>
+    <lastmod>2023-04-06T15:02:24.021Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+</urlset>
+```
+
+- robots.txt
+
+```txt
+User-Agent: *
+Allow: /
+Disallow: /private/
+
+Sitemap: https://acme.com/sitemap.xml
+```
+
+### Dynamic
+
+This way is more flexible and allows you to generate a sitemap based on your content.
+Simply create a file `sitemap.ts` \ `robots.ts` in the root of your project and write a function that will generate a sitemap.
+
+- sitemap
+
+```javascript
+import { MetadataRoute } from "next";
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    {
+      url: "https://acme.com",
+      lastModified: new Date(),
+      changeFrequency: "yearly",
+      priority: 1,
+    },
+    {
+      url: "https://acme.com/about",
+      lastModified: new Date(),
+      changeFrequency: "monthly",
+      priority: 0.8,
+    },
+    {
+      url: "https://acme.com/blog",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.5,
+    },
+  ];
+}
+```
+
+- robots
+
+```javascript
+import { MetadataRoute } from "next";
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: "/private/",
+    },
+    sitemap: "https://acme.com/sitemap.xml",
+  };
+}
+```
+
+## Conclusion
+As with the meta tags, the new version provides us with more tools to work with the sitemap and robots.txt.
+We don't need to use any additional packages to generate them, and we can do it in a more flexible way.
+
+<TopicsNav
+  prevLink={{ title: "Meta tags", path: "/meta-tags" }}
+  nextLink={{ title: "Canonical & Localization tags", path: "/canonical-localization" }}
+/>
