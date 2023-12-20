@@ -13,7 +13,8 @@ export const metadata: Metadata = {
   applicationName: "Next.js 14 SEO Checklist",
   referrer: "origin-when-cross-origin",
   keywords: ["Next.js", "SEO", "React", "Performance"],
-  authors: [{ name: "Alex Hramovich" }],
+  images: ["https://cdn.sanity.io/images/0xiy76wv/production/74e31f73a4cd86c932951002ef121b666da5c526-2298x1137.png?auto=format"],
+authors: [{ name: "Alex Hramovich" }],
   creator: "Alex Hramovich",
   publisher: "FocusReactive",
   formatDetection: {
