@@ -1,5 +1,18 @@
 import TopicsNav from "@/components/TopicsNav";
 
+export const metadata = {
+  title: "Rendering Strategy",
+  description: "The best rendering strategy for SEO in your Next.js app",
+  openGraph: {
+    title: "Rendering Strategy | Next 14 SEO",
+    description: "The best rendering strategy for SEO in your Next.js app",
+    url: "https://next-14-seo.vercel.app/rendering",
+    siteName: "Next.js 14 SEO Checklist",
+    type: "article",
+    authors: ["Alex Hramovich"],
+  },
+};
+
 # Rendering Strategy
 
 ## Pages router
@@ -35,4 +48,7 @@ and then see how all these issues are addressed in Next >= 13.
 App router and server components is a huge step forward in the development of web applications both Technial and SEO.
 It's a new level of flexibility and convenience. Use it and enjoy it!
 
-<TopicsNav prevLink={{title: 'Dashboard', path: '/'}} nextLink={{title: 'Meta tags', path: '/meta-tags'}} />
+<TopicsNav
+  prevLink={{ title: "Dashboard", path: "/" }}
+  nextLink={{ title: "Meta tags", path: "/meta-tags" }}
+/>

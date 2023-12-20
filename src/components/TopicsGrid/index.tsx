@@ -41,38 +41,54 @@ const TOPICS = [
     title: "Structured data",
     description:
       "Implementing structured data for enhanced search engine understanding.",
-    link: "#",
+    link: "/structured-data",
   },
   {
     title: "Redirects",
     description:
       "Effective use of redirects for site structure and URL management.",
-    link: "#",
+    link: "/redirects",
   },
   {
-    title: "AMP",
-    description:
-      "Accelerated Mobile Pages for faster loading on mobile devices.",
-    link: "#",
+    title: "FOCUS REACTIVE",
+    description: "THE EXPERT CONSULTANCY FOR THE MODERN WEB",
+    link: "https://focusreactive.com/",
+    type: "external",
   },
 ];
 
 const TopicsGrid: React.FC = () => {
   return (
     <div className="grid grid-flow-row-dense gap-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-clos-1">
-      {TOPICS.map((topic) => (
-        <Link key={topic.title} href={topic.link}>
-          <div
-            key={topic.title}
-            className="card glass h-full w-full bg-base-100 shadow-xl hover:bg-primary hover:text-primary-content transition-all"
-          >
-            <div className="card-body">
-              <h2 className="card-title">{topic.title}</h2>
-              <p>{topic.description}</p>
+      {TOPICS.map((topic) => {
+        if (topic.type === "external")
+          return (
+            <Link key={topic.title} href={topic.link} target="_blank" className="group text-clip hover">
+              <div className="card h-full w-full bg-slate-800 text-primary-content">
+                <div className="card-body">
+                  <h2 className="card-title text-white">{topic.title}</h2>
+                  <p className="text-emerald-600 font-bold group-hover:underline">
+                    {topic.description}
+                  </p>
+                </div>
+              </div>
+            </Link>
+          );
+
+        return (
+          <Link key={topic.title} href={topic.link}>
+            <div
+              key={topic.title}
+              className="card glass h-full w-full bg-base-100 shadow-xl hover:bg-primary hover:text-primary-content transition-all"
+            >
+              <div className="card-body">
+                <h2 className="card-title">{topic.title}</h2>
+                <p>{topic.description}</p>
+              </div>
             </div>
-          </div>
-        </Link>
-      ))}
+          </Link>
+        );
+      })}
     </div>
   );
 };

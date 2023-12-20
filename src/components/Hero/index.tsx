@@ -32,7 +32,7 @@ const Hero: React.FC = () => (
         </div>
         <div className="text-center">
           <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Next.js 14 SEO walkthrough
+            Next.js 14 SEO checklist
           </h1>
           <p className="mt-6 text-lg leading-8 text-gray-600">
             You can treat this set as a checklist, ensuring that once

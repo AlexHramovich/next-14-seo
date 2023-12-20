@@ -1,5 +1,19 @@
 import TopicsNav from "@/components/TopicsNav";
 
+export const metadata = {
+  title: "Sitemap & Robots.txt",
+  description: "Best ways to manage a sitemap & tobots.txt in your Next.js app",
+  openGraph: {
+    title: "Sitemap & Robots.txt | Next 14 SEO",
+    description:
+      "Best ways to manage a sitemap & tobots.txt in your Next.js app",
+    url: "https://next-14-seo.vercel.app/sitemap-robots",
+    siteName: "Next.js 14 SEO Checklist",
+    type: "article",
+    authors: ["Alex Hramovich"],
+  },
+};
+
 # Sitemap & Robots.txt
 
 ## Pages router
@@ -177,10 +191,14 @@ export default function robots(): MetadataRoute.Robots {
 ```
 
 ## Conclusion
+
 As with the meta tags, the new version provides us with more tools to work with the sitemap and robots.txt.
 We don't need to use any additional packages to generate them, and we can do it in a more flexible way.
 
 <TopicsNav
   prevLink={{ title: "Meta tags", path: "/meta-tags" }}
-  nextLink={{ title: "Canonical & Localization tags", path: "/canonical-localization" }}
+  nextLink={{
+    title: "Canonical & Localization tags",
+    path: "/canonical-localization",
+  }}
 />

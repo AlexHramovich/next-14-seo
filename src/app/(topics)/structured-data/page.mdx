@@ -1,0 +1,181 @@
+import TopicsNav from "@/components/TopicsNav";
+import TopicsImages from "@/components/TopicsImages";
+
+export const metadata = {
+  title: "Scructured data",
+  description: "Best ways to manage structured data in your Next.js app",
+  openGraph: {
+    title: "Scructured data | Next 14 SEO",
+    description: "Best ways to manage structured data in your Next.js app",
+    url: "https://next-14-seo.vercel.app/sctructured-data",
+    siteName: "Next.js 14 SEO Checklist",
+    type: "article",
+    authors: ["Alex Hramovich"],
+  },
+};
+
+# Scructured data
+
+Structured data is crucial for enabling search engines to understand your web pages more effectively.
+Over time, various vocabularies have been constantly changing, but currently, the most actual one is schema.org.
+
+Schema.org is described on its website as a "collaborative, community activity aimed at developing,
+maintaining, and advocating for schemas for structured data on the Internet, on web pages, in email messages, and more."
+
+The vocabulary provided by Schema.org is compatible with several encodings, such as RDFa, Microdata, and JSON-LD.
+
+Different search engines may utilize various vocabularies from schema.org,
+and it's important to note that no single search engine incorporates all the use cases outlined in schema.org's vocabulary.
+It's advisable to verify which vocabularies are recognized by each search engine.
+
+This looks something like this, I'm sure. You must have seen such results in searches before.
+
+<TopicsImages id="popular-products" />
+
+## Pages router
+
+When using a classic router, you will have to manually add structured data to each page.
+That means the approach remains unchanged; we need to find a way to bring modern practices into our Next project.
+
+Below we present an official example from the Next.js documentation.
+This is an example of what a product page might look like.
+
+```jsx
+import Head from "next/head";
+
+function ProductPage() {
+  function addProductJsonLd() {
+    return {
+      __html: `{
+      "@context": "https://schema.org/",
+      "@type": "Product",
+      "name": "Executive Anvil",
+      "image": [
+        "https://example.com/photos/1x1/photo.jpg",
+        "https://example.com/photos/4x3/photo.jpg",
+        "https://example.com/photos/16x9/photo.jpg"
+       ],
+      "description": "Sleeker than ACME's Classic Anvil, the Executive Anvil is perfect for the business traveler looking for something to drop from a height.",
+      "sku": "0446310786",
+      "mpn": "925872",
+      "brand": {
+        "@type": "Brand",
+        "name": "ACME"
+      },
+      "review": {
+        "@type": "Review",
+        "reviewRating": {
+          "@type": "Rating",
+          "ratingValue": "4",
+          "bestRating": "5"
+        },
+        "author": {
+          "@type": "Person",
+          "name": "Fred Benson"
+        }
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.4",
+        "reviewCount": "89"
+      },
+      "offers": {
+        "@type": "Offer",
+        "url": "https://example.com/anvil",
+        "priceCurrency": "USD",
+        "price": "119.99",
+        "priceValidUntil": "2020-11-20",
+        "itemCondition": "https://schema.org/UsedCondition",
+        "availability": "https://schema.org/InStock"
+      }
+    }
+  `,
+    };
+  }
+  return (
+    <div>
+      <Head>
+        <title>My Product</title>
+        <meta
+          name="description"
+          content="Super product with free shipping."
+          key="desc"
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={addProductJsonLd()}
+          key="product-jsonld"
+        />
+      </Head>
+      <h1>My Product</h1>
+      <p>Super product for sale.</p>
+    </div>
+  );
+}
+
+export default ProductPage;
+```
+
+Overall, this is a decent option, but you need a clear understanding of how it works and what data needs to be added.
+The set of links we provide below may help you.
+
+- Open Graph Protocol: <a href="https://ogp.me/" target="_blank">Documentation</a>
+- Google: <a href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data" target="_blank">Intro to Structured Data</a>
+- Google: <a href="https://developers.google.com/search/docs/appearance/structured-data/product" target="_blank">Product Structured Data</a>
+- Google Search: <a href="https://search.google.com/test/rich-results" target="_blank">Rich Results Tester</a>
+
+## App router
+
+We would like to say that the App router brings a ready-made solution, but that's not the case.
+We will have to follow the same path, namely, to add structured data to a script tag that will be inserted into the page.
+
+Let's consider it using the example of a product page, but with less data,
+as the concept is exactly the same as in the previous example.
+
+```jsx
+export default async function Page({ params }) {
+  const product = await getProduct(params.id);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: product.image,
+    description: product.description,
+  };
+
+  return (
+    <section>
+      {/* Add JSON-LD to your page */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      {/* ... */}
+    </section>
+  );
+}
+```
+
+What can really make life easier is a type library, recommended for everyone. <a href="https://www.npmjs.com/package/schema-dts" target="_blank">LINK</a>.
+It's much easier to create these objects with its help.
+
+```jsx
+import { Product, WithContext } from "schema-dts";
+
+const jsonLd: WithContext<Product> = {
+  "@context": "https://schema.org",
+  "@type": "Product",
+  name: "Next.js Sticker",
+  image: "https://nextjs.org/imgs/sticker.png",
+  description: "Dynamic at the speed of static.",
+};
+```
+
+Alas, there are no magical ways to make everything easy,
+but this is still one of the important and crucial methods to progress in SEO.
+
+<TopicsNav
+  prevLink={{ title: "Core Web Vitals", path: "/core-web-vitals" }}
+  nextLink={{ title: "Redirects", path: "/redirects" }}
+/>

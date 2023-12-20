@@ -1,6 +1,7 @@
 import Image from "next/image";
 import realDataImage from "./real-data.png";
 import labData from "./lab-data.png";
+import popularImages from "./popular-products.png";
 
 const IMAGES = [
   {
@@ -12,6 +13,11 @@ const IMAGES = [
     id: "lab-data",
     alt: "lab-data",
     file: labData,
+  },
+  {
+    id: "popular-products",
+    alt: "Popular products",
+    file: popularImages,
   },
 ];
 

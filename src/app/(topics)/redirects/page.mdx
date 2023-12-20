@@ -1,0 +1,250 @@
+import TopicsNav from "@/components/TopicsNav";
+
+export const metadata = {
+  title: "Redirects",
+  description: "Best ways to manage redirects in your Next.js app",
+  openGraph: {
+    title: "Redirects | Next 14 SEO",
+    description: "Best ways to manage redirects in your Next.js app",
+    url: "https://next-14-seo.vercel.app/redirects",
+    siteName: "Next.js 14 SEO Checklist",
+    type: "article",
+    authors: ["Alex Hramovich"],
+  },
+};
+
+# Redirects
+
+In Next.js, there are many ways to implement redirects.
+We will list them, but we won't go into details, as it would take a lot of time.
+However, we will discuss where and which method can be applicable.
+
+### Next.js execution order
+
+Take a look at the list below, it shows the order in which code is executed during a page request.
+Based on this, you can decide which redirect method suits you best, as the speed of its execution will obviously vary.
+
+1. **headers** from next.config.js
+2. **redirects** from next.config.js
+3. **Middleware** (rewrites, redirects, etc.)
+4. **beforeFiles** (rewrites) from next.config.js
+5. **Filesystem routes** (public/, \_next/static/, pages/, app/, etc.)
+6. **afterFiles** (rewrites) from next.config.js
+7. **Dynamic Routes** (/blog/[slug])
+8. **fallback** (rewrites) from next.config.js
+
+### Next.js config
+
+Regardless of the router, you can manage redirects at the project configuration level.
+This method is the fastest because it's executed before Next.js starts processing requests.
+It's excellent for static redirects that don't require dynamic management.
+
+```jsx
+module.exports = {
+  async redirects() {
+    return [
+      {
+        source: "/old-blog/:slug",
+        destination: "/news/:slug", // Matched parameters can be used in the destination
+        permanent: true,
+      },
+    ];
+  },
+};
+```
+
+It's important to note that this is a quite flexible approach,
+as these redirects can be managed based on headers or query parameters.
+
+```jsx
+module.exports = {
+  async redirects() {
+    return [
+      // if the header `x-redirect-me` is present,
+      // this redirect will be applied
+      {
+        source: "/:path((?!another-page$).*)",
+        has: [
+          {
+            type: "header",
+            key: "x-redirect-me",
+          },
+        ],
+        permanent: false,
+        destination: "/another-page",
+      },
+      // if the header `x-dont-redirect` is present,
+      // this redirect will NOT be applied
+      {
+        source: "/:path((?!another-page$).*)",
+        missing: [
+          {
+            type: "header",
+            key: "x-do-not-redirect",
+          },
+        ],
+        permanent: false,
+        destination: "/another-page",
+      },
+      // if the source, query, and cookie are matched,
+      // this redirect will be applied
+      {
+        source: "/specific/:path*",
+        has: [
+          {
+            type: "query",
+            key: "page",
+            // the page value will not be available in the
+            // destination since value is provided and doesn't
+            // use a named capture group e.g. (?<page>home)
+            value: "home",
+          },
+          {
+            type: "cookie",
+            key: "authorized",
+            value: "true",
+          },
+        ],
+        permanent: false,
+        destination: "/another/:path*",
+      },
+      // if the header `x-authorized` is present and
+      // contains a matching value, this redirect will be applied
+      {
+        source: "/",
+        has: [
+          {
+            type: "header",
+            key: "x-authorized",
+            value: "(?<authorized>yes|true)",
+          },
+        ],
+        permanent: false,
+        destination: "/home?authorized=:authorized",
+      },
+      // if the host is `example.com`,
+      // this redirect will be applied
+      {
+        source: "/:path((?!another-page$).*)",
+        has: [
+          {
+            type: "host",
+            value: "example.com",
+          },
+        ],
+        permanent: false,
+        destination: "/another-page",
+      },
+    ];
+  },
+};
+```
+
+These redirects also support basePath and locale, making them convenient for use in various applications.
+
+## Pages router
+
+Now, let's move on to routers and the differences between them.
+In the Pages router, we have access to several additional methods of redirects.
+
+### getStaticProps
+
+At the stage of page generation or revalidation,
+you can define how the page should behave. This way, you can set up a redirect for it.
+
+```jsx
+export async function getStaticProps(context) {
+  const res = await fetch(`https://...`);
+  const data = await res.json();
+
+  if (!data) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+        // statusCode: 301
+      },
+    };
+  }
+
+  return {
+    props: { data }, // will be passed to the page component as props
+  };
+}
+```
+
+### getServerSideProps
+
+Another way to achieve the same goal is by using a dynamic method,
+which allows for dynamic redirects at the user request level.
+
+```jsx
+export async function getServerSideProps(context) {
+  const res = await fetch(`https://.../data`);
+  const data = await res.json();
+
+  if (!data) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: {}, // will be passed to the page component as props
+  };
+}
+```
+
+## App router
+
+In the new version of our router, we also have the capability to perform redirects in a unique way.
+Moreover, it looks very simple and straightforward.
+
+The **redirect** function allows you to redirect the user to another URL.
+**redirect** can be used in Server Components, Client Components, Route Handlers, and Server Actions.
+
+```jsx
+redirect(path, type);
+```
+
+YES! As simple as that.
+
+```jsx
+import { redirect } from "next/navigation";
+
+async function fetchTeam(id) {
+  const res = await fetch("https://...");
+  if (!res.ok) return undefined;
+  return res.json();
+}
+
+export default async function Profile({ params }) {
+  const team = await fetchTeam(params.id);
+  if (!team) {
+    redirect("/login");
+  }
+
+  // ...
+}
+```
+
+## Summary
+
+Nothing ever disappears from the internet without a trace.
+When you delete pages, change their paths, or migrate an old website to a new domain,
+it's crucial to ensure that users don't encounter 404 errors.
+Instead, they should be seamlessly redirected to the new pages.
+Otherwise, Google may consider the pages deleted and start removing them from its index, resulting in a loss of traffic.
+
+There are numerous ways to implement redirects,
+but it's important to understand that each method has its unique features and is suitable for different scenarios.
+
+Good luck with your redirects implementation!
+
+<TopicsNav
+  prevLink={{ title: "Structured data", path: "/structured-data" }}
+  nextLink={{ title: "Dashboard", path: "/" }}
+/>
