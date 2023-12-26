@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     default: "Next.js SEO checklist",
   },
   description:
-    "All things you need to know about SEO in Next.js 14 to make your website rank higher in search engines.",
+    "All things you need to know about SEO in Next.js to make your website rank higher in search engines.",
   generator: "Next.js",
   applicationName: "Next.js SEO Checklist",
   referrer: "origin-when-cross-origin",
