@@ -25,10 +25,10 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "Next 14 SEO Checklist",
+    title: "Next.js SEO Checklist",
     description:
-      "All things you need to know about SEO in Next.js 14 to make your website rank higher in search engines.",
-    url: "https://next-14-seo.vercel.app",
+      "All things you need to know about SEO in Next.js to make your website rank higher in search engines.",
+    url: "https://next-seo-checklist.vercel.app",
     siteName: "Next.js SEO Checklist",
     type: "website",
     images: [
